@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+    }
+    form {
+      max-width: 500px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+    }
+    .form-control {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+      display: none;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #9e9e9e;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Contact Us</h2>
+<form id="contactForm" novalidate>
+  <div class="form-control">
+    <label for="name">Full Name *</label>
+    <input type="text" id="name" name="name" required minlength="3" placeholder="Your full name" />
+    <div class="error-message" id="nameError">Please enter at least 3 characters.</div>
+  </div>
+
+  <div class="form-control">
+    <label for="email">Email Address *</label>
+    <input type="email" id="email" name="email" required placeholder="example@mail.com" />
+    <div class="error-message" id="emailError">Please enter a valid email address.</div>
+  </div>
+
+  <div class="form-control">
+    <label>Gender *</label>
+    <input type="radio" id="genderMale" name="gender" value="Male" required />
+    <label for="genderMale" style="display:inline;">Male</label>
+    <input type="radio" id="genderFemale" name="gender" value="Female" />
+    <label for="genderFemale" style="display:inline;">Female</label>
+    <input type="radio" id="genderOther" name="gender" value="Other" />
+    <label for="genderOther" style="display:inline;">Other</label>
+    <div class="error-message" id="genderError">Please select your gender.</div>
+  </div>
+
+  <div class="form-control">
+    <label for="interests">Interests (select at least one) *</label>
+    <input type="checkbox" id="interest1" name="interests" value="Programming" />
+    <label for="interest1" style="display:inline;">web Development</label><br />
+    <input type="checkbox" id="interest2" name="interests" value="Design" />
+    <label for="interest2" style="display:inline;">Graphic Design</label><br />
+    <input type="checkbox" id="interest3" name="interests" value="Marketing" />
+    <label for="interest3" style="display:inline;">Mobile App Aplication</label><br />
+    <div class="error-message" id="interestsError">Please select at least one interest.</div>
+  </div>
+
+  <div class="form-control">
+    <label for="country">City *</label>
+    <select id="country" name="country" required>
+      <option value="">-- Please select --</option>
+      <option value="Nairobi">Nairobi</option>
+      <option value="Nakuru">Nakuru</option>
+      <option value="Mombasa">Mombasa</option>
+      <option value="Kisumu">Kisumu</option>
+      <option value="Other">Other</option>
+    </select>
+    <div class="error-message" id="countryError">Please select your country.</div>
+  </div>
+
+  <div class="form-control">
+    <label for="message">Message *</label>
+    <textarea id="message" name="message" rows="5" required minlength="10" placeholder="Write your message here..."></textarea>
+    <div class="error-message" id="messageError">Please enter at least 10 characters.</div>
+  </div>
+
+  <button type="submit">Send Message</button>
+</form>
+
+<script>
+  const form = document.getElementById('contactForm');
+
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // Clear all previous error messages
+    document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+    let isValid = true;
+
+    // Validate Name
+    const name = form.name.value.trim();
+    if (name.length < 3) {
+      document.getElementById('nameError').style.display = 'block';
+      isValid = false;
+    }
+
+    // Validate Email
+    const email = form.email.value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      document.getElementById('emailError').style.display = 'block';
+      isValid = false;
+    }
+
+    // Validate Gender (radio)
+    const genderChecked = [...form.gender].some(radio => radio.checked);
+    if (!genderChecked) {
+      document.getElementById('genderError').style.display = 'block';
+      isValid = false;
+    }
+
+    // Validate Interests (checkbox)
+    const checkedInterests = [...form.elements['interests']].filter(box => box.checked);
+    if (checkedInterests.length < 1) {
+      document.getElementById('interestsError').style.display = 'block';
+      isValid = false;
+    }
+
+    // Validate Country (dropdown)
+    if (form.country.value === '') {
+      document.getElementById('countryError').style.display = 'block';
+      isValid = false;
+    }
+
+    // Validate Message (textarea)
+    const message = form.message.value.trim();
+    if (message.length < 10) {
+      document.getElementById('messageError').style.display = 'block';
+      isValid = false;
+    }
+
+    if (isValid) {
+      alert('Thank you for contacting us, ' + name + '!');
+      form.reset();
+    }
+  });
+</script>
+
+</body>
+</html>
